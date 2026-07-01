@@ -37,7 +37,10 @@ def test_cli_web_ingress_flag(monkeypatch):
 
 
 def test_cli_high_confidence_drops_keyword(monkeypatch):
-    assert _run(["--high-confidence"], "password: hunter2longplaintextvalue", monkeypatch) is None
+    assert (
+        _run(["--high-confidence"], "password: hunter2longplaintextvalue", monkeypatch)
+        is None
+    )
 
 
 def test_cli_env_secret_reads_process_env(monkeypatch):

@@ -21,11 +21,18 @@ keywords = [
   "tool-output",
 ]
 # agent-input-sanitizer owns the invisible-character charset SSOT the redactor
-# MUST share (see src/agent_secret_redactor/invisible.py). TODO(published-dep):
-# pin a released version once the Python client is published to PyPI; until then
-# install its `python/` distribution from a checkout. It is a hard dependency, not
-# an optional one — a missing charset must fail closed, never fall back to a copy.
+# MUST share (see src/agent_secret_redactor/invisible.py). It is a hard
+# dependency, not optional — a missing charset must fail closed, never fall back
+# to a copy. TODO(published-dep): the Python client is not on PyPI yet, so it is
+# sourced from its public git repo via [tool.uv.sources] below; switch to a pinned
+# PyPI release once published.
 dependencies = ["detect-secrets>=1.5.0", "agent-input-sanitizer>=1.3.0"]
+
+[tool.uv.sources]
+# Resolve the unpublished charset SSOT from its public git repo (subdirectory
+# `python/`). Pinned to the commit that adds the shared invisible-charset module;
+# bump to a tag/main once agent-input-sanitizer publishes the Python client.
+agent-input-sanitizer = { git = "https://github.com/AlexanderMattTurner/agent-input-sanitizer.git", subdirectory = "python", rev = "dfb5fa47c73ad916f3191532b8160d99af5906b9" }
 
 [project.urls]
 Homepage = "https://github.com/alexander-turner/agent-secret-redactor"

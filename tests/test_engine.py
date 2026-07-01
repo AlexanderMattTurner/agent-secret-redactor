@@ -877,7 +877,9 @@ def test_both_detectors_one_secret():
 # ─── Secret-format drift guard (engine side) ─────────────────────────────────
 
 
-@pytest.mark.parametrize("sample", SAMPLES, ids=[f"{s['name']}-{s['parts'][0]}" for s in SAMPLES])
+@pytest.mark.parametrize(
+    "sample", SAMPLES, ids=[f"{s['name']}-{s['parts'][0]}" for s in SAMPLES]
+)
 def test_fixture_sample_is_redacted(sample):
     token = "".join(sample["parts"])
     result = run_plain(f"key: {token}")
@@ -886,7 +888,9 @@ def test_fixture_sample_is_redacted(sample):
     assert token not in result["text"], sample
 
 
-@pytest.mark.parametrize("sample", SAMPLES, ids=[f"{s['name']}-{s['parts'][0]}" for s in SAMPLES])
+@pytest.mark.parametrize(
+    "sample", SAMPLES, ids=[f"{s['name']}-{s['parts'][0]}" for s in SAMPLES]
+)
 def test_fixture_bodies_are_credential_shaped(sample):
     parts = sample["parts"]
     for chunk in [*parts, "".join(parts)]:
@@ -897,7 +901,9 @@ def test_fixture_bodies_are_credential_shaped(sample):
         assert longest < 8, (sample["name"], chunk)
 
 
-@pytest.mark.parametrize("sample", SAMPLES, ids=[f"{s['name']}-{s['parts'][0]}" for s in SAMPLES])
+@pytest.mark.parametrize(
+    "sample", SAMPLES, ids=[f"{s['name']}-{s['parts'][0]}" for s in SAMPLES]
+)
 def test_fixture_token_is_redaction_eligible(sample):
     token = "".join(sample["parts"])
     assert E._is_placeholder_value(token) is False, sample
@@ -965,7 +971,9 @@ def test_map_mode_parity_and_reconstruction():
     assert view["found"] == normal["found"]
 
 
-@pytest.mark.parametrize("sample", SAMPLES, ids=[f"{s['name']}-{s['parts'][0]}" for s in SAMPLES])
+@pytest.mark.parametrize(
+    "sample", SAMPLES, ids=[f"{s['name']}-{s['parts'][0]}" for s in SAMPLES]
+)
 def test_map_mode_reconstructs_every_sample_format(sample):
     token = "".join(sample["parts"])
     text = f"before\nkey: {token}\nafter\n"
@@ -1165,7 +1173,7 @@ def test_configure_plugins_then_redact_configured():
     """The daemon's hot path: configure the plugin set ONCE, then redact many
     times without the per-call cache dance. Result must equal the one-shot
     ``redact``."""
-    from agent_secret_redactor import RedactorConfig, configure_plugins, redact_configured
+    from agent_secret_redactor import configure_plugins, redact_configured
 
     text = "key: AKIAIOSFODNN7EXAMPLE"
     with configure_plugins():

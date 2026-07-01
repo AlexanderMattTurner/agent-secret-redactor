@@ -161,7 +161,9 @@ def serve(socket_path: str, stop: threading.Event | None = None) -> None:
     """
     os.makedirs(os.path.dirname(socket_path) or ".", mode=0o700, exist_ok=True)
     with configure_plugins():
-        redact_configured("warm up the detect-secrets mapping cache", None, RedactorConfig())
+        redact_configured(
+            "warm up the detect-secrets mapping cache", None, RedactorConfig()
+        )
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         if not _bind_or_exit(sock, socket_path):
             sock.close()

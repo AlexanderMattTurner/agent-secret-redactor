@@ -717,7 +717,9 @@ def configure_plugins(high_confidence: bool = False):
 
     class _Ctx:
         def __enter__(self):
-            self._settings = transient_settings({"plugins_used": plugins + CUSTOM_PLUGINS})
+            self._settings = transient_settings(
+                {"plugins_used": plugins + CUSTOM_PLUGINS}
+            )
             self._settings.__enter__()
             get_mapping_from_secret_type_to_class.cache_clear()
             return self
@@ -808,7 +810,9 @@ def _redact_map(text: str, config: RedactorConfig, engine) -> dict:
     return {"text": resolved, "pairs": pairs, "found": list(dict.fromkeys(found))}
 
 
-def detected_secret_values(text: str, config: RedactorConfig | None = None) -> list[str]:
+def detected_secret_values(
+    text: str, config: RedactorConfig | None = None
+) -> list[str]:
     """Raw values of every secret :func:`redact` would remove from ``text``,
     de-duped in first-seen order (never the placeholders).
 

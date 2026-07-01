@@ -47,7 +47,11 @@ The **rehydration** differentiator — an injective, deterministic map back to t
 original bytes. Each entry of `pairs` is:
 
 ```json
-{ "placeholder": "[REDACTED: …]", "original": "<exact original bytes>", "start": 42 }
+{
+  "placeholder": "[REDACTED: …]",
+  "original": "<exact original bytes>",
+  "start": 42
+}
 ```
 
 `start` is the offset of the placeholder in `text`. Substituting every `original`
@@ -67,13 +71,13 @@ uses, `redact_map` returns `{"unmappable": <reason>}` (fail closed).
 
 ### Configuration is passed in, never discovered — `RedactorConfig`
 
-| field | meaning |
-| --- | --- |
-| `provider_vars` / `host_cred_vars` | `name -> value` maps whose values are redacted by exact match (labelled `[REDACTED: <name>]`). Unioned, provider first. |
-| `invisible_charset` | Payload-capable invisible code points to strip / tolerate. `None` (default) sources the **shared** set from `agent-input-sanitizer` — see below. |
-| `web_ingress` | Mark attacker-controlled text (disables the name-based benign-skip heuristics). |
-| `high_confidence` | Structural detectors only (drop the fuzzy keyword / field-value matchers). |
-| `min_secret_len` | Floor below which a configured value is treated as a placeholder (default 16). |
+| field                              | meaning                                                                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `provider_vars` / `host_cred_vars` | `name -> value` maps whose values are redacted by exact match (labelled `[REDACTED: <name>]`). Unioned, provider first.                          |
+| `invisible_charset`                | Payload-capable invisible code points to strip / tolerate. `None` (default) sources the **shared** set from `agent-input-sanitizer` — see below. |
+| `web_ingress`                      | Mark attacker-controlled text (disables the name-based benign-skip heuristics).                                                                  |
+| `high_confidence`                  | Structural detectors only (drop the fuzzy keyword / field-value matchers).                                                                       |
+| `min_secret_len`                   | Floor below which a configured value is treated as a placeholder (default 16).                                                                   |
 
 The engine reads no config files and scans no environment. The **caller** supplies
 the env-var set — which for claude-guard is the union of `monitor-providers.json`

@@ -63,7 +63,10 @@ def test_read_frame_over_cap_is_rejected_before_body(monkeypatch):
 
 def test_request_config_filters_non_str_env_secrets():
     config = S._request_config(
-        {"env_secrets": {"GOOD": "value", "BAD": 123, "ALSO": None}, "web_ingress": True}
+        {
+            "env_secrets": {"GOOD": "value", "BAD": 123, "ALSO": None},
+            "web_ingress": True,
+        }
     )
     assert config.provider_vars == {"GOOD": "value"}
     assert config.web_ingress is True

@@ -31,7 +31,9 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="agent-secret-redactor")
     parser.add_argument("--map", action="store_true", dest="map_mode")
     parser.add_argument("--web-ingress", action="store_true", dest="web_ingress")
-    parser.add_argument("--high-confidence", action="store_true", dest="high_confidence")
+    parser.add_argument(
+        "--high-confidence", action="store_true", dest="high_confidence"
+    )
     parser.add_argument("--env-secret", action="append", default=[], dest="env_secrets")
     args = parser.parse_args(argv)
 

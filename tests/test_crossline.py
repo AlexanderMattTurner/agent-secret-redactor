@@ -11,7 +11,7 @@ import pytest
 
 import agent_secret_redactor.engine as E
 from agent_secret_redactor import DEFAULT_MIN_SECRET_LEN, detected_secret_values, redact
-from conftest import cfg, reconstruct, run_map, run_plain
+from conftest import cfg, run_plain
 
 AWS_KEY = "AKIA" + "ZYXWVUT123456789"
 _LONG = "qZ7vK2mNp9rT4wX1cY6bA8dF3gH5jL0e"  # 32 chars, >= DEFAULT_MIN_SECRET_LEN

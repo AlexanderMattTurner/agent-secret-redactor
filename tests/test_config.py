@@ -1,7 +1,5 @@
 """RedactorConfig: env-secret union semantics and charset resolution."""
 
-import pytest
-
 from agent_secret_redactor import RedactorConfig, redact
 from agent_secret_redactor.config import DEFAULT_MIN_SECRET_LEN
 
