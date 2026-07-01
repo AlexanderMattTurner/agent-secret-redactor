@@ -1,13 +1,72 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "claude-automation-template"
-version = "0.0.0"
+name = "agent-secret-redactor"
+version = "0.1.0"
+description = "Agent-agnostic secret-redaction engine: detect and redact API keys, tokens, and PEM keys from tool output, with a lossless rehydration map."
+readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Alexander Turner" }]
+keywords = [
+  "secrets",
+  "redaction",
+  "detect-secrets",
+  "api-keys",
+  "llm",
+  "agent",
+  "security",
+  "tool-output",
+]
+# agent-input-sanitizer owns the invisible-character charset SSOT the redactor
+# MUST share (see src/agent_secret_redactor/invisible.py). It is a hard
+# dependency, not optional — a missing charset must fail closed, never fall back
+# to a copy. TODO(published-dep): the Python client is not on PyPI yet, so it is
+# sourced from its public git repo via [tool.uv.sources] below; switch to a pinned
+# PyPI release once published.
+dependencies = ["detect-secrets>=1.5.0", "agent-input-sanitizer>=1.3.0"]
+
+[tool.uv.sources]
+# Resolve the unpublished charset SSOT from its public git repo (subdirectory
+# `python/`). Pinned to the commit that adds the shared invisible-charset module;
+# bump to a tag/main once agent-input-sanitizer publishes the Python client.
+agent-input-sanitizer = { git = "https://github.com/AlexanderMattTurner/agent-input-sanitizer.git", subdirectory = "python", rev = "dfb5fa47c73ad916f3191532b8160d99af5906b9" }
+
+[project.urls]
+Homepage = "https://github.com/alexander-turner/agent-secret-redactor"
+Repository = "https://github.com/alexander-turner/agent-secret-redactor"
+Issues = "https://github.com/alexander-turner/agent-secret-redactor/issues"
 
 [project.optional-dependencies]
-dev = ["pytest>=7"]
+dev = ["pytest>=7", "hypothesis>=6"]
 
-[tool.ruff]
-target-version = "py310"
+[project.scripts]
+agent-secret-redactor = "agent_secret_redactor.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_secret_redactor"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/agent_secret_redactor", "README.md", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+  "drift_guard: a test whose only job is to catch drift between two sources of truth",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["agent_secret_redactor"]
+
+[tool.coverage.report]
+# A file that leaves claude-guard also leaves its coverage gate; re-establish it
+# here. The engine is a security boundary — every line stays exercised.
+show_missing = true
+fail_under = 100
+exclude_also = ["if __name__ == .__main__.:"]
+
+[tool.ruff]
+target-version = "py310"
